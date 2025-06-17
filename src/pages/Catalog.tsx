@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ProductCard from "@/components/ProductCard";
@@ -5,6 +6,8 @@ import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 
 const Catalog = () => {
+  const [selectedCategory, setSelectedCategory] = useState("Все товары");
+
   const categories = [
     "Все товары",
     "Тетради",
@@ -60,6 +63,11 @@ const Catalog = () => {
     },
   ];
 
+  const filteredProducts =
+    selectedCategory === "Все товары"
+      ? products
+      : products.filter((product) => product.category === selectedCategory);
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
@@ -82,9 +90,12 @@ const Catalog = () => {
                 {categories.map((category, index) => (
                   <Button
                     key={index}
-                    variant={index === 0 ? "default" : "ghost"}
+                    variant={
+                      selectedCategory === category ? "default" : "ghost"
+                    }
                     className="w-full justify-start"
                     size="sm"
+                    onClick={() => setSelectedCategory(category)}
                   >
                     {category}
                   </Button>
@@ -96,7 +107,7 @@ const Catalog = () => {
           <div className="lg:w-3/4">
             <div className="flex justify-between items-center mb-6">
               <span className="text-gray-600">
-                Найдено {products.length} товаров
+                Найдено {filteredProducts.length} товаров
               </span>
               <div className="flex items-center space-x-2">
                 <Icon name="Search" className="w-4 h-4 text-gray-400" />
@@ -105,7 +116,7 @@ const Catalog = () => {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-              {products.map((product, index) => (
+              {filteredProducts.map((product, index) => (
                 <ProductCard key={index} {...product} />
               ))}
             </div>

@@ -1,10 +1,18 @@
+import { useState } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import Icon from "@/components/ui/icon";
 
 const Cart = () => {
+  const [formData, setFormData] = useState({
+    name: "",
+    phone: "",
+  });
+
   const cartItems = [
     {
       name: "Тетрадь А4 в клетку",
@@ -83,8 +91,40 @@ const Cart = () => {
           <div className="lg:col-span-1">
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Итого</h3>
-                <div className="space-y-2 mb-4">
+                <h3 className="text-lg font-semibold mb-6">
+                  Оформление заказа
+                </h3>
+
+                <div className="space-y-4 mb-6">
+                  <div>
+                    <Label htmlFor="name">Имя</Label>
+                    <Input
+                      id="name"
+                      type="text"
+                      placeholder="Введите ваше имя"
+                      value={formData.name}
+                      onChange={(e) =>
+                        setFormData({ ...formData, name: e.target.value })
+                      }
+                      className="mt-1"
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="phone">Телефон</Label>
+                    <Input
+                      id="phone"
+                      type="tel"
+                      placeholder="+7 (999) 123-45-67"
+                      value={formData.phone}
+                      onChange={(e) =>
+                        setFormData({ ...formData, phone: e.target.value })
+                      }
+                      className="mt-1"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2 mb-6">
                   <div className="flex justify-between">
                     <span>Товары:</span>
                     <span>{total} ₽</span>
@@ -96,10 +136,15 @@ const Cart = () => {
                   <hr />
                   <div className="flex justify-between font-semibold text-lg">
                     <span>К оплате:</span>
-                    <span>{total} ₽</span>
+                    <span className="text-blue-600">{total} ₽</span>
                   </div>
                 </div>
-                <Button className="w-full" size="lg">
+
+                <Button
+                  className="w-full"
+                  size="lg"
+                  disabled={!formData.name || !formData.phone}
+                >
                   Оформить заказ
                 </Button>
               </CardContent>
